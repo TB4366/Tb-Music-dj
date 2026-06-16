@@ -2,241 +2,121 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>DJ Set</title>
-
-<style>
-body{
-    margin:0;
-    background:#111;
-    color:white;
-    font-family:Arial;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.dj{
-    display:flex;
-    gap:20px;
-}
-
-.deck,.mixer{
-    background:#222;
-    border-radius:15px;
-    padding:20px;
-    box-shadow:0 0 20px #000;
-}
-
-.deck{
-    width:350px;
-}
-
-.mixer{
-    width:250px;
-}
-
-.jog{
-    width:220px;
-    height:220px;
-    border-radius:50%;
-    background:
-    radial-gradient(circle,#555,#111);
-    margin:auto;
-    animation:spin 6s linear infinite;
-    animation-play-state:paused;
-}
-
-@keyframes spin{
-    from{
-        transform:rotate(0deg);
-    }
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-button{
-    padding:10px;
-    margin:5px;
-}
-
-input[type=range]{
-    width:100%;
-}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DJ Mixer Pro</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="dj">
 
 <div class="deck">
+<h2>DECK A</h2>
 
-<h2>Deck A</h2>
+<div class="wave" id="waveA"></div>
 
 <div class="jog" id="jogA"></div>
 
 <audio id="audioA"></audio>
 
-<input
-type="file"
-accept="audio/*"
-onchange="loadFile(event,'A')">
+<input type="file" id="fileA" accept="audio/*">
 
-<br>
+<div class="controls">
+<button id="playA">▶</button>
+<button id="pauseA">⏸</button>
+<button id="cueA">CUE</button>
+<button id="loopA">LOOP</button>
+</div>
 
-<button onclick="playDeck('A')">
-Play
-</button>
+Pitch
+<input type="range" id="pitchA"
+min="0.5" max="2" step="0.01" value="1">
 
-<button onclick="pauseDeck('A')">
-Pause
-</button>
-
+Volume
+<input type="range" id="volA"
+min="0" max="1" step="0.01" value="1">
 </div>
 
 <div class="mixer">
 
-<h2>Mixer</h2>
+<h2>MIXER</h2>
 
 Crossfader
-
-<input
+<input type="range"
 id="cross"
-type="range"
 min="0"
 max="100"
 value="50">
 
-<br><br>
+Bass
+<input type="range"
+id="bass"
+min="-30"
+max="30"
+value="0">
 
-Volume A
+Mid
+<input type="range"
+id="mid"
+min="-30"
+max="30"
+value="0">
 
-<input
-id="volA"
-type="range"
+Treble
+<input type="range"
+id="treble"
+min="-30"
+max="30"
+value="0">
+
+Echo
+<input type="range"
+id="echo"
 min="0"
 max="1"
-step="0.01"
-value="1">
-
-<br><br>
-
-Volume B
-
-<input
-id="volB"
-type="range"
-min="0"
-max="1"
-step="0.01"
-value="1">
+step="0.1"
+value="0">
 
 </div>
 
 <div class="deck">
+<h2>DECK B</h2>
 
-<h2>Deck B</h2>
+<div class="wave" id="waveB"></div>
 
 <div class="jog" id="jogB"></div>
 
 <audio id="audioB"></audio>
 
-<input
-type="file"
-accept="audio/*"
-onchange="loadFile(event,'B')">
+<input type="file" id="fileB" accept="audio/*">
 
-<br>
+<div class="controls">
+<button id="playB">▶</button>
+<button id="pauseB">⏸</button>
+<button id="cueB">CUE</button>
+<button id="loopB">LOOP</button>
+</div>
 
-<button onclick="playDeck('B')">
-Play
-</button>
+Pitch
+<input type="range"
+id="pitchB"
+min="0.5"
+max="2"
+step="0.01"
+value="1">
 
-<button onclick="pauseDeck('B')">
-Pause
-</button>
+Volume
+<input type="range"
+id="volB"
+min="0"
+max="1"
+step="0.01"
+value="1">
 
 </div>
 
 </div>
 
-<script>
-const audioA =
-document.getElementById("audioA");
-
-const audioB =
-document.getElementById("audioB");
-
-function loadFile(e,deck){
-
-const file =
-e.target.files[0];
-
-if(!file) return;
-
-const url =
-URL.createObjectURL(file);
-
-document.getElementById(
-"audio"+deck
-).src = url;
-}
-
-function playDeck(deck){
-
-const audio =
-document.getElementById(
-"audio"+deck
-);
-
-audio.play();
-
-document.getElementById(
-"jog"+deck
-).style.animationPlayState =
-"running";
-}
-
-function pauseDeck(deck){
-
-const audio =
-document.getElementById(
-"audio"+deck
-);
-
-audio.pause();
-
-document.getElementById(
-"jog"+deck
-).style.animationPlayState =
-"paused";
-}
-
-document
-.getElementById("cross")
-.oninput = function(){
-
-let v =
-this.value/100;
-
-audioA.volume = 1-v;
-audioB.volume = v;
-};
-
-document
-.getElementById("volA")
-.oninput = function(){
-audioA.volume = this.value;
-};
-
-document
-.getElementById("volB")
-.oninput = function(){
-audioB.volume = this.value;
-};
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
