@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>DJ Set met 2 YouTube Decks</title>
+<title>DJ Mixer</title>
 <style>
 body{
     background:#111;
@@ -13,111 +13,107 @@ body{
 
 .deck{
     display:inline-block;
-    width:45%;
-    margin:20px;
+    width:40%;
+    padding:20px;
 }
 
-input{
-    width:80%;
-    padding:10px;
-    margin:10px;
+input[type=file]{
+    margin:15px;
 }
 
-button{
-    padding:10px 20px;
-    margin:5px;
-}
-
-iframe{
-    width:100%;
-    height:300px;
-}
-
-#crossfader{
-    width:80%;
+input[type=range]{
+    width:250px;
 }
 </style>
 </head>
 <body>
 
-<h1>🎧 DJ Set - 2 Decks</h1>
+<h1>🎧 DJ Mixer</h1>
 
 <div class="deck">
     <h2>Deck A</h2>
 
-    <input id="linkA"
-    placeholder="YouTube link">
+    <audio id="audioA" controls></audio>
+    <br><br>
 
-    <button onclick="loadVideo('A')">
-        Laden
-    </button>
+    <input type="file"
+           accept="audio/*"
+           onchange="loadFile(event,'A')">
 
-    <iframe id="playerA"></iframe>
+    <br><br>
+
+    Volume:
+    <input id="volA"
+           type="range"
+           min="0"
+           max="1"
+           step="0.01"
+           value="1">
 </div>
 
 <div class="deck">
     <h2>Deck B</h2>
 
-    <input id="linkB"
-    placeholder="YouTube link">
+    <audio id="audioB" controls></audio>
+    <br><br>
 
-    <button onclick="loadVideo('B')">
-        Laden
-    </button>
+    <input type="file"
+           accept="audio/*"
+           onchange="loadFile(event,'B')">
 
-    <iframe id="playerB"></iframe>
+    <br><br>
+
+    Volume:
+    <input id="volB"
+           type="range"
+           min="0"
+           max="1"
+           step="0.01"
+           value="1">
 </div>
 
 <h2>🎚️ Crossfader</h2>
 
 <input
+id="cross"
 type="range"
 min="0"
 max="100"
-value="50"
-id="crossfader">
-
-<p>
-Links = Deck A |
-Rechts = Deck B
-</p>
+value="50">
 
 <script>
-function getId(url){
+const audioA = document.getElementById("audioA");
+const audioB = document.getElementById("audioB");
 
-    if(url.includes("watch?v=")){
-        return url.split("watch?v=")[1]
-                  .split("&")[0];
-    }
+function loadFile(e, deck){
+    const file = e.target.files[0];
+    if(!file) return;
 
-    if(url.includes("youtu.be/")){
-        return url.split("youtu.be/")[1];
-    }
-
-    return "";
-}
-
-function loadVideo(deck){
-
-    let input =
-    document.getElementById(
-        "link"+deck
-    ).value;
-
-    let id = getId(input);
-
-    if(id===""){
-        alert("Geen geldige link");
-        return;
-    }
+    const url = URL.createObjectURL(file);
 
     document.getElementById(
-        "player"+deck
-    ).src =
-    "https://www.youtube.com/embed/"
-    + id +
-    "?enablejsapi=1";
+        "audio"+deck
+    ).src = url;
 }
+
+document.getElementById("cross")
+.addEventListener("input", function(){
+
+    const v = this.value / 100;
+
+    audioA.volume = 1 - v;
+    audioB.volume = v;
+});
+
+document.getElementById("volA")
+.addEventListener("input", function(){
+    audioA.volume = this.value;
+});
+
+document.getElementById("volB")
+.addEventListener("input", function(){
+    audioB.volume = this.value;
+});
 </script>
 
 </body>
